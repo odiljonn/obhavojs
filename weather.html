@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Weather App</title>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Weather App</h2>
+      <input type="text" id="city" placeholder="Enter the name of the city" />
+      <button onclick="getWeather()">See the weather</button>
+      <div id="Weatherinfo"></div>
+    </div>
+
+    <script>
+      async function getWeather() {
+        const city = document.getElementById("city").value;
+        const apiKey = "0d1b3aab05685d8235bc7866fb53270e";
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=en`;
+
+        try {
+          const response = await fetch(url);
+          const data = await response.json();
+
+          if (data.cod === "404") {
+            document.getElementById("Weatherinfo").innerHTML =
+              "Shahar topilmadi!";
+            return;
+          }
+          document.getElementById("Weatherinfo").innerHTML = `
+                    <h3>${data.name}, ${data.sys.country}</h3>
+                    <p>Harorat: ${data.main.temp}°C</p>
+                    <p>Shamol tezligi: ${data.wind.speed} m/s</p>
+                    <p>Namlik: ${data.main.humidity}%</p>
+                    <p>Ob-havo: ${data.weather[0].description}</p>
+                `;
+        } catch (error) {
+          document.getElementById("Weatherinfo").innerHTML =
+            "Xatolik yuz berdi!";
+        }
+      }
+    </script>
+  </body>
+</html>
